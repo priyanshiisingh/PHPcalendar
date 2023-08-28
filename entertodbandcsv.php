@@ -5,51 +5,43 @@ include 'db_config.php';
 // Read the holiday CSV file and store dates in an array
 $holidaysFile = "holidays.csv";
 $holidays = array();
+$count = 1;
 
 if (($handle = fopen($holidaysFile, "r")) !== false) {
+    $header = fgetcsv($handle, 1000, ","); // Read column headers
+
     while (($data = fgetcsv($handle, 1000, ",")) !== false) {
-        $holidays[] = $data[0]; // Assuming the holiday date is in the first column
+        $holidayItem = array_combine($header, $data); // Combine header and data
+        $jsonItem = array(
+            "id" => $count++,
+            "start" => $data[0],
+            "end" => $holidayItem["evt_end"],
+            "name" => $holidayItem["name"],
+            // Add other keys you want to include here
+        );
+        $holidays[] = $jsonItem;
     }
     fclose($handle);
-}else{
+    print_r($holidays); // Display the structured array with your existing $holidays array
+} else {
     echo "Please upload a list of company holidays through holidays.csv file.";
 }
 
-// Step 1: Make an HTTP request to the API and get JSON data
-$apiUrl = 'https://www.googleapis.com/calendar/v3/calendars/en.indian%23holiday%40group.v.calendar.google.com/events?key=AIzaSyCDS95lwXGJva1ESHsrWZUrspm0F-R_E3Y'; // Replace YOUR_API_KEY with your actual API key
-$jsonData = file_get_contents($apiUrl);
+$csvData = ''; 
 
-// Step 2: Parse the JSON data into a PHP array or object
-$data = json_decode($jsonData, true); // Set the second parameter to true for an associative array
-
-if (empty($data) || !isset($data['items'])) {
-    die("Error: Unable to fetch or parse JSON data.");
-}
-
-// Step 3: Select specific fields and convert the PHP array into a CSV format
-$csvData = '';
-$csvData .= implode(',', ['evt_id', 'evt_start', 'evt_end', 'evt_text', '$evt_color', '$evt_bg', '$evt_category']) . "\n";
-
-foreach ($data['items'] as $item) {
-    // Extract the values for selected fields
-    $evt_id = $item['id'];
-    $evt_start = $item['start']['date'];
-    $evt_end =  $item['start']['date'];
-    $evt_text = $item['summary'];
-    
-    // Check if evt_start date is present in the holiday CSV file
-    if (in_array($evt_start, $holidays)) {
-        $evt_color ="white";
-        $evt_bg="#D62246";
-        $evt_category=2;
-    }else{
-        $evt_color ="#000000";
-        $evt_bg="#FFDBDB";
-        $evt_category=1;
-    }
-
+foreach ($holidays as $holidayItem) {
+    $evt_id = $holidayItem['id'];
+    $evt_start = $holidayItem['start'];
+    $evt_end = $holidayItem['end']; // Use the 'end' key
+    $evt_text = $holidayItem['name'];
+    $evt_color = "white";
+    $evt_bg = "#D62246";
+    $evt_category = 2;
     $csvData .= implode(',', [$evt_id, $evt_start, $evt_end, $evt_text, $evt_color, $evt_bg, $evt_category]) . "\n";
 }
+
+// Now you can use the $csvData as needed, for example, save it to a CSV file
+
 
 
 // Calculate odd saturdays for the year
