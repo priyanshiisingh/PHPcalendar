@@ -31,6 +31,9 @@
   <!-- JS + CSS -->
   <script src="4b-calendar.js"></script>
   <link rel="stylesheet" href="4c-calendar.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 
 <body>
@@ -57,12 +60,14 @@
       <input id="calNext" type="button" class="mi" value="&gt;">
     </div>
     <input id="calReset" type="button" value="Reset">
-    <script>
+    <input id="uploadHoliday" type="button" value="Upload Holiday List" data-bs-toggle="modal"
+      data-bs-target="#UploadModal">
+    <!-- <script>
       // JavaScript code to handle button click event
       document.getElementById('calReset').addEventListener('click', function () {
         window.location.href = 'entertodbandcsv.php';
       });
-    </script>
+    </script> -->
 
     <input id="calAdd" type="button" value="+">
   </div>
@@ -113,11 +118,44 @@
     </form>
   </dialog>
 
+  <hr>
 
-  <form method="post" action="upload.php" enctype="multipart/form-data">
-    <input type="file" name="fileToUpload" id="fileToUpload">
-    <input type="submit" value="Upload" name="submit">
-  </form>
+  <div class="modal fade" id="UploadModal" tabindex="-1" aria-labelledby="UploadModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="UploadModalLabel">Upload File</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form method="post" id="uploadForm" enctype="multipart/form-data">
+            <label for="fileToUpload" class="form-label">Upload Holiday list file: </label>
+            <input type="file" name="fileToUpload" id="fileToUpload" class="form-control mb-3">
+            <button type="submit" name="submit" class="btn btn-primary">Upload</button>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="toast-container position-fixed bottom-0 end-0 p-3">
+    <div id="toaster" class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="true">
+      <div class="toast-header">
+        <strong class="me-auto">File Upload</strong>
+        <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+      </div>
+      <div class="toast-body text-white">
+      </div>
+    </div>
+  </div>
+
+  <script src="fileajax.js"></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous">
+  </script>
 </body>
 
 </html>
