@@ -85,7 +85,7 @@
       <h2 class="evt100">CALENDAR EVENT</h2>
       <div class="evt50">
         <label>Start</label>
-        <input id="evtStart" type="date" required>
+        <input id="evtStart" type="date" required value="<?php echo date('Y-m-d'); ?>" >
       </div>
       <div class="evt50">
         <label>End</label>
