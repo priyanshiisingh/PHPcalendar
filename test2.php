@@ -6,7 +6,7 @@
   <br>
   <label for="leaveType">Leave Type:</label>
   <select id="leaveType">
-    <option selected disabled>Select</option>
+    <option value="" selected disabled>Select</option>
     <option value="fullDay">Full Day</option>
     <option value="halfDay">Half Day</option>
   </select>
@@ -28,7 +28,6 @@
 
 
   <div id="dateOptions"></div>
-  <button id="submitButton2" style="display: none;">Submit</button>
   <div>Total Leaves: <span id="totalLeaves">0</span></div>
 
 

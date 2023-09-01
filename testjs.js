@@ -25,7 +25,6 @@ const halfDayOptions = document.getElementById("halfDayOptions");
 const toDateSection = document.getElementById("toDateSection");
 const halfDayTypeSelect = document.getElementById("halfDayType");
 const submitButton = document.getElementById("submitButton");
-const submitButton2 = document.getElementById("submitButton2");
 const totalLeavesSpan = document.getElementById("totalLeaves");
 
 const fromDateInput = document.getElementById("fromDate");
@@ -37,12 +36,10 @@ let initialToDate = null;
 
 fromDateInput.addEventListener("input", function () {
   initialFromDate = new Date(fromDateInput.value);
-  // updateDateOptions();
 });
 
 toDateInput.addEventListener("input", function () {
   initialToDate = new Date(toDateInput.value);
-  // updateDateOptions();
 });
 
 leaveTypeSelect.addEventListener("change", () => {
@@ -61,52 +58,19 @@ halfDayTypeSelect.addEventListener("change", () => {
   } else {
     toDateSection.style.display = "none";
   }
-  // updateDateOptions();
 });
 
-submitButton.addEventListener("click", () => {
-  const fromDate = document.getElementById("fromDate").value;
-  const toDate = document.getElementById("toDate").value;
-  const leaveType = leaveTypeSelect.value;
-  const halfDayType = halfDayTypeSelect.value;
-  submitButton2.style.display = "block";
 
-  console.log("From Date:", fromDate);
-  if (leaveType === "fullDay") {
-    console.log("To Date:", toDate);
-    updateDateOptions();
-  } else {
-    console.log("Half Day Type:", halfDayType);
-    if (halfDayType === "secondHalf") {
-      console.log("To Date:", toDate);
-      updateDateOptions();
-
-      if (fromDate === toDate) {
-        submitButton2.style.display = "none";
-        count = 0; // Reset the count before recounting
-
-        dateOptionsDiv.innerHTML = "";
-        count += 0.5;
-        totalLeavesSpan.textContent = count;
-      }
-    } else {
-      submitButton2.style.display = "none";
-      count = 0; // Reset the count before recounting
-
-      dateOptionsDiv.innerHTML = "";
-      count += 0.5;
-      totalLeavesSpan.textContent = count;
-    }
-  }
-});
-
-submitButton2.addEventListener("click", () => {
+function updateLeaveCount(){
   const selectedDayOptions = document.querySelectorAll(
     'input[type="radio"]:checked'
   );
-  const halfDayType = halfDayTypeSelect.value;
-  const leaveType = leaveTypeSelect.value;
   count = 0; // Reset the count before recounting
+  let halfDayType = halfDayTypeSelect.value;
+  const leaveType = leaveTypeSelect.value;
+  if (leaveType === "fullDay") {
+    halfDayType="";
+  }
 
   selectedDayOptions.forEach((option) => {
     const selectedOption = option.value;
@@ -118,15 +82,60 @@ submitButton2.addEventListener("click", () => {
     }
   });
 
-  if (halfDayType === "secondHalf") {
-    count += 0.5;
-  }
   if (leaveType === "fullDay") {
     count += 1;
   }
+  if (halfDayType === "secondHalf") {
+    count += 0.5;
+  }
+  
 
   // Update the displayed total leave count
   totalLeavesSpan.textContent = count;
+}
+
+
+submitButton.addEventListener("click", () => {
+  const fromDate = document.getElementById("fromDate").value;
+  const toDate = document.getElementById("toDate").value;
+  const leaveType = leaveTypeSelect.value;
+  let halfDayType = halfDayTypeSelect.value;
+
+  if (fromDate=="") {
+    alert("Dates can't be empty");
+  }
+  
+  updateLeaveCount();
+
+  console.log("From Date:", fromDate);
+  if (leaveType === "fullDay") {
+    console.log("To Date:", toDate);
+    updateDateOptions();
+
+  } else if (leaveType === "halfDay"){
+    console.log("Half Day Type:", halfDayType);
+    if (halfDayType === "secondHalf") {
+      console.log("To Date:", toDate);
+      updateDateOptions();
+
+      if (fromDate === toDate) {
+
+        count = 0; // Reset the count before recounting
+
+        dateOptionsDiv.innerHTML = "";
+        count += 0.5;
+        totalLeavesSpan.textContent = count;
+      }
+    } else {
+      count = 0; // Reset the count before recounting
+
+      dateOptionsDiv.innerHTML = "";
+      count += 0.5;
+      totalLeavesSpan.textContent = count;
+    }
+  }else{
+    alert("Please select leave type");
+  }
 });
 
 function updateDateOptions() {
@@ -188,8 +197,9 @@ function updateDateOptions() {
   );
   if (selectedHalfDayOption && selectedHalfDayOption.value === "secondHalf") {
     dateOptionsDiv.innerHTML = "";
-    count += 0.5;
   }
+
+  updateLeaveCount();
 }
 
 dateOptionsDiv.addEventListener("input", handleDayOptionChange);
@@ -210,14 +220,12 @@ function handleDayOptionChange(event) {
     return;
   }
 
-  let firstDate = new Date(fromDateInput.value);
-  let lastDate = new Date(toDateInput.value);
   if (selectedOption === "halfDay") {
     const nextDayOption = document.querySelector(
       `input[name='${optionName.replace("halfDay", "fullDay")}']`
     );
     if (nextDayOption) {
-      nextDayOption.disabled = true;
+      nextDayOption.disabled = false;
     }
 
     if (currentOptionDate < toDateInput.valueAsDate) {
@@ -233,4 +241,6 @@ function handleDayOptionChange(event) {
       nextDayOption.disabled = false;
     }
   }
+
+  updateLeaveCount();
 }
