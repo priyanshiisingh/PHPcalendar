@@ -69,9 +69,9 @@ function insertCategories($conn, $csvFilePath) {
             $conn->query("SET FOREIGN_KEY_CHECKS = 1");
         }
         while (($data = fgetcsv($handle, 1000, ",")) !== false) {
-            $evt_category = $conn->real_escape_string($data[3]);
-            $evt_color = $conn->real_escape_string($data[4]);
-            $evt_bg = $conn->real_escape_string($data[5]);
+            $evt_category = $conn->real_escape_string($data[0]);
+            $evt_color = $conn->real_escape_string($data[1]);
+            $evt_bg = $conn->real_escape_string($data[2]);
             $sql = "INSERT INTO categories (category_name, category_color, category_bg) VALUES ('$evt_category','$evt_color','$evt_bg')";
             $conn->query($sql);
         }
@@ -102,6 +102,7 @@ function insertEvents($conn, $csvFilePath) {
 // Example usage:
 $holidaysFilePath = "holidays.csv";
 $eventsFilePath = "events.csv";
+$categoriesFilePath = "categories.csv";
 $currentYear = date("Y");
 
 $response = array();
@@ -124,7 +125,7 @@ if ($holidays !== false) {
     $csvData = generateCsvData($allEvents);
 
     if (saveCsvToFile($csvData, $eventsFilePath)) {
-        insertCategories($conn, $holidaysFilePath);
+        insertCategories($conn, $categoriesFilePath);
         insertEvents($conn, $eventsFilePath);
         $response["status"] = "success";
         $response["message"] = "Data inserted successfully.";

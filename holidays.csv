@@ -1,8 +1,8 @@
-﻿evt_start,evt_end,name,category,color,bg
-2023-01-26,2023-01-26,Republic Day,Festive Holidays,white,#D62246
-2023-03-08,2023-03-08,Holi,Working Saturdays,#000000,#FFFC41
-2023-08-15,2023-08-15,Independence Day,IT Department,white,#F03716
-2023-08-30,2023-08-30,Raksha Bandhan,VAT Department,white,#A730F1
-2023-09-19,2023-09-19,Ganesh Chaturthi,Year End Department,white,#46CC4B
-2023-10-24,2023-10-24,Dusherra,Payroll Department,white,#30CFF2
-2023-11-13,2023-11-15,Diwali,,,
+﻿evt_start,evt_end,name
+2024-01-26,2024-01-26,Republic Day
+2024-03-10,2024-03-10,Holi
+2024-08-15,2024-08-15,Independence Day
+2024-08-29,2024-08-29,Raksha Bandhan
+2024-09-20,2024-09-20,Ganesh Chaturthi
+2024-10-25,2024-10-25,Dusherra
+2024-11-14,2024-11-14,Diwali
